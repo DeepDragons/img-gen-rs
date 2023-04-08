@@ -1,7 +1,6 @@
-use image::{imageops, DynamicImage, GenericImageView, ImageError, RgbaImage};
-use std::path::Path;
+use image::{imageops, DynamicImage};
 
-use crate::{config::general::DEFAULT_FORMAT, genes};
+use crate::config::general::DEFAULT_FORMAT;
 
 pub struct Composite {
     out: String,
@@ -13,89 +12,138 @@ impl Composite {
         Composite { out, data }
     }
 
-    pub fn composite(self, genes: Vec<u8>) {}
+    pub fn composite(self, genes: Vec<u8>) {
+        let mut background = self.open_background(&genes).unwrap();
+        let save_path = format!("{}/{}.{}", self.out, 0, DEFAULT_FORMAT);
+        let some_pars = vec![
+            self.open_body(&genes),
+            self.open_aura(&genes),
+            self.open_eyes(&genes),
+            self.open_horns(&genes),
+            self.open_mouth(&genes),
+            self.open_spine(&genes),
+            self.open_chest(&genes),
+            self.open_wings(&genes),
+            self.open_accessories(&genes),
+            self.open_ears(&genes),
+            self.open_hair(&genes),
+        ];
+        let pars: Vec<&DynamicImage> = some_pars.iter().filter_map(|v| v.as_ref()).collect();
 
-    fn open_background(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+        for img in pars {
+            background = self.overlay_images(&background, &img);
+        }
+
+        background.save(save_path).unwrap();
+    }
+
+    fn overlay_images(&self, background: &DynamicImage, foreground: &DynamicImage) -> DynamicImage {
+        let mut result = background.to_rgba8();
+
+        imageops::overlay(&mut result, foreground, 0, 0);
+
+        DynamicImage::ImageRgba8(result)
+    }
+
+    fn open_background(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[1];
-        let mask = format!("{}/background/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!(
+            "{}/{}/background/{}.{}",
+            self.data, rarity, gen, DEFAULT_FORMAT
+        );
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_aura(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_aura(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[12];
-        let mask = format!("{}/aura/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/aura/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_body(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_body(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[2];
-        let mask = format!("{}/body/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/body/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_eyes(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_eyes(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[3];
-        let mask = format!("{}/eyes/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/eyes/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_horns(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_horns(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[4];
-        let mask = format!("{}/horns/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/horns/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_mouth(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_mouth(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[5];
-        let mask = format!("{}/mouth/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/mouth/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_spine(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_spine(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[6];
-        let mask = format!("{}/spine/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/spine/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_chest(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_chest(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[7];
-        let mask = format!("{}/chest/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/chest/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_wings(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_wings(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[8];
-        let mask = format!("{}/wings/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/wings/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_accessories(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_accessories(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[9];
-        let mask = format!("{}/accessories/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!(
+            "{}/{}/accessories/{}.{}",
+            self.data, rarity, gen, DEFAULT_FORMAT
+        );
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_ears(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_ears(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[10];
-        let mask = format!("{}/ears/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/ears/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 
-    fn open_hair(self, genes: Vec<u8>) -> Result<DynamicImage, ImageError> {
+    fn open_hair(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[11];
-        let mask = format!("{}/hair/{}.{}", self.data, gen, DEFAULT_FORMAT);
+        let rarity = genes[0];
+        let mask = format!("{}/{}/hair/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
-        image::open(&mask)
+        image::open(mask).ok()
     }
 }
