@@ -13,7 +13,9 @@ impl Composite {
     }
 
     pub fn composite(self, genes: Vec<u8>) {
-        let mut background = self.open_background(&genes).unwrap();
+        let mut background = self
+            .open_background(&genes)
+            .unwrap_or(DynamicImage::new_rgba8(2500, 2500));
         let save_path = format!("{}/{}.{}", self.out, 0, DEFAULT_FORMAT);
         let some_pars = vec![
             self.open_body(&genes),
