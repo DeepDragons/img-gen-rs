@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::io::{Error, ErrorKind};
 
 use super::rarity::{BACKGROUND, ELEMENTS_LIST};
 
@@ -9,12 +10,13 @@ fn random_number(range: (u8, u8)) -> u8 {
     rng.gen_range(min..=max)
 }
 
-pub fn generate_genes(rarity: u8) -> Vec<u8> {
+pub fn generate_genes(rarity: u8) -> Result<Vec<u8>, Error> {
     // {rarity}, {background}, {body}, {eyes}, {horns}, {mouth}, {spine?}, {chest?}, {wings?}, {accessories?}, {ears?}, {hair?}, {aura?}
     let mut genes: Vec<u8> = Vec::with_capacity(16);
-    let elements = ELEMENTS_LIST
-        .get(rarity as usize)
-        .expect("Out of range rarity number!");
+    let elements = match ELEMENTS_LIST.get(rarity as usize) {
+        Some(list) => list,
+        None => return Err(Error::new(ErrorKind::NotFound, "out of range rarity!")),
+    };
 
     genes[0] = rarity;
     genes[1] = random_number(BACKGROUND);
@@ -31,5 +33,5 @@ pub fn generate_genes(rarity: u8) -> Vec<u8> {
     genes[11] = random_number(elements.hair);
     genes[12] = random_number(elements.aura);
 
-    genes
+    Ok(genes)
 }
