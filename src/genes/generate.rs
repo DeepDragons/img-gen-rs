@@ -10,15 +10,15 @@ fn random_number(range: (u8, u8)) -> u8 {
     rng.gen_range(min..=max)
 }
 
-pub fn generate_genes(rarity: u8) -> Result<Vec<u8>, Error> {
+pub fn generate_genes(rarity: usize) -> Result<Vec<u8>, Error> {
     // {rarity}, {background}, {body}, {eyes}, {horns}, {mouth}, {spine?}, {chest?}, {wings?}, {accessories?}, {ears?}, {hair?}, {aura?}
-    let mut genes: Vec<u8> = Vec::with_capacity(16);
-    let elements = match ELEMENTS_LIST.get(rarity as usize) {
+    let mut genes: Vec<u8> = vec![0; 16];
+    let elements = match ELEMENTS_LIST.get(rarity) {
         Some(list) => list,
         None => return Err(Error::new(ErrorKind::NotFound, "out of range rarity!")),
     };
 
-    genes[0] = rarity;
+    genes[0] = rarity as u8;
     genes[1] = random_number(BACKGROUND);
 
     genes[2] = random_number(elements.body);
@@ -34,4 +34,11 @@ pub fn generate_genes(rarity: u8) -> Result<Vec<u8>, Error> {
     genes[12] = random_number(elements.aura);
 
     Ok(genes)
+}
+
+#[test]
+fn test_generate() {
+    let genes = generate_genes(2).unwrap();
+
+    assert!(genes.len() == 16);
 }

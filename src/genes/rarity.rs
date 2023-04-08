@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Rarity {
     pub accessories: (u8, u8),
     pub aura: (u8, u8),
