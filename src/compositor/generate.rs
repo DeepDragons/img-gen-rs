@@ -18,6 +18,8 @@ impl Composite {
             .unwrap_or(DynamicImage::new_rgba8(2500, 2500));
         let save_path = format!("{}/{}.{}", self.out, 0, DEFAULT_FORMAT);
         let some_pars = vec![
+            self.open_back_details(&genes),
+            self.open_wings(&genes),
             self.open_body(&genes),
             self.open_aura(&genes),
             self.open_eyes(&genes),
@@ -25,7 +27,6 @@ impl Composite {
             self.open_mouth(&genes),
             self.open_spine(&genes),
             self.open_chest(&genes),
-            self.open_wings(&genes),
             self.open_accessories(&genes),
             self.open_ears(&genes),
             self.open_hair(&genes),
@@ -51,7 +52,7 @@ impl Composite {
         let gen = genes[1];
         let rarity = genes[0];
         let mask = format!(
-            "{}/{}/background/{}.{}",
+            "{}/{}/Background/{}.{}",
             self.data, rarity, gen, DEFAULT_FORMAT
         );
 
@@ -61,7 +62,18 @@ impl Composite {
     fn open_aura(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[12];
         let rarity = genes[0];
-        let mask = format!("{}/{}/aura/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Aura/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+
+        image::open(mask).ok()
+    }
+
+    fn open_back_details(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
+        let gen = genes[13];
+        let rarity = genes[0];
+        let mask = format!(
+            "{}/{}/Backdetails/{}.{}",
+            self.data, rarity, gen, DEFAULT_FORMAT
+        );
 
         image::open(mask).ok()
     }
@@ -69,7 +81,7 @@ impl Composite {
     fn open_body(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[2];
         let rarity = genes[0];
-        let mask = format!("{}/{}/body/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Body/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
@@ -77,7 +89,7 @@ impl Composite {
     fn open_eyes(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[3];
         let rarity = genes[0];
-        let mask = format!("{}/{}/eyes/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Eyes/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
@@ -85,7 +97,7 @@ impl Composite {
     fn open_horns(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[4];
         let rarity = genes[0];
-        let mask = format!("{}/{}/horns/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Horns/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
@@ -93,7 +105,7 @@ impl Composite {
     fn open_mouth(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[5];
         let rarity = genes[0];
-        let mask = format!("{}/{}/mouth/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Mouth/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
@@ -101,7 +113,7 @@ impl Composite {
     fn open_spine(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[6];
         let rarity = genes[0];
-        let mask = format!("{}/{}/spine/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Spine/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
@@ -109,7 +121,7 @@ impl Composite {
     fn open_chest(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[7];
         let rarity = genes[0];
-        let mask = format!("{}/{}/chest/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Chest/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
@@ -117,7 +129,7 @@ impl Composite {
     fn open_wings(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[8];
         let rarity = genes[0];
-        let mask = format!("{}/{}/wings/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Wings/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
@@ -126,7 +138,7 @@ impl Composite {
         let gen = genes[9];
         let rarity = genes[0];
         let mask = format!(
-            "{}/{}/accessories/{}.{}",
+            "{}/{}/Accessories/{}.{}",
             self.data, rarity, gen, DEFAULT_FORMAT
         );
 
@@ -136,7 +148,7 @@ impl Composite {
     fn open_ears(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[10];
         let rarity = genes[0];
-        let mask = format!("{}/{}/ears/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Ears/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
@@ -144,7 +156,7 @@ impl Composite {
     fn open_hair(&self, genes: &Vec<u8>) -> Option<DynamicImage> {
         let gen = genes[11];
         let rarity = genes[0];
-        let mask = format!("{}/{}/hair/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
+        let mask = format!("{}/{}/Hair/{}.{}", self.data, rarity, gen, DEFAULT_FORMAT);
 
         image::open(mask).ok()
     }
