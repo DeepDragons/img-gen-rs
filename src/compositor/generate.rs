@@ -12,7 +12,7 @@ impl Composite {
         Composite { out, data }
     }
 
-    pub fn composite(self, genes: Vec<u8>) {
+    pub fn composite(self, genes: &Vec<u8>) {
         let mut background = self
             .open_background(&genes)
             .unwrap_or(DynamicImage::new_rgba8(2500, 2500));
