@@ -21,14 +21,14 @@ pub fn worker() {
         for key in keys {
             let list = genes_map.get(&key).unwrap();
 
-            for gene in list {
+            for (index, gene) in list.iter().enumerate() {
                 scope.spawn(move |_| {
                     let out = format!("/home/rinat/source/tmp/{}", &key);
                     let data = String::from("/home/rinat/source/dragons_imgs");
                     let compositer = Composite::new(out, data);
 
                     println!("{}", genes_view(&gene));
-                    compositer.composite(&gene);
+                    compositer.composite(&gene, index);
                 });
             }
         }
