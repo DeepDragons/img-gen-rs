@@ -4,7 +4,7 @@ use img_gen_rs::{
 };
 
 fn main() {
-    let rarity = 3;
+    let rarity = 6;
     let data = String::from("/home/rinat/source/dragons_imgs");
     let tmp = String::from("/home/rinat/source/tmp");
     let genes = generate_genes(rarity).unwrap();

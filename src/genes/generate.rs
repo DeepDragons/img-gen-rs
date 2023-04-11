@@ -3,6 +3,8 @@ use std::io::{Error, ErrorKind};
 
 use super::rarity::{BACKGROUND, ELEMENTS_LIST};
 
+const N100: f64 = 100.0;
+
 fn random_number(range: (u8, u8)) -> u8 {
     let (min, max) = range;
     let mut rng = rand::thread_rng();
@@ -35,6 +37,28 @@ pub fn generate_genes(rarity: usize) -> Result<Vec<u8>, Error> {
     genes[13] = random_number(elements.back_details);
 
     Ok(genes)
+}
+
+pub fn generate_pars(parts: (u8, u8, u8, u8, u8, u8, u8), total: usize) -> Vec<u8> {
+    let total_elements = total as f64;
+    let mut array: Vec<u8> = vec![];
+    let zero_count = (parts.0 as f64 / N100) * total_elements;
+    let one_count = (parts.1 as f64 / N100) * total_elements;
+    let two_count = (parts.2 as f64 / N100) * total_elements;
+    let three_count = (parts.3 as f64 / N100) * total_elements;
+    let four_count = (parts.4 as f64 / N100) * total_elements;
+    let five_count = (parts.5 as f64 / N100) * total_elements;
+    let six_count = (parts.6 as f64) * total_elements;
+
+    array.extend(vec![0; zero_count as usize]);
+    array.extend(vec![1; one_count as usize]);
+    array.extend(vec![2; two_count as usize]);
+    array.extend(vec![3; three_count as usize]);
+    array.extend(vec![4; four_count as usize]);
+    array.extend(vec![5; five_count as usize]);
+    array.extend(vec![6; six_count as usize]);
+
+    array
 }
 
 pub fn genes_view(genes: &Vec<u8>) -> String {
